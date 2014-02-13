@@ -346,7 +346,9 @@ class DbStore extends Object
                                     subject_is varchar(1),
                                     object_is varchar(1),
                                     primary key (modelID, subject, predicate, object,
-                                    l_language, l_datatype))');
+                                        l_language, l_datatype)
+                                  )
+                                ENGINE=\'MyISAM\'');
 
         $this->dbConn->execute('CREATE INDEX s_mod_idx ON statements (modelID)');
         $this->dbConn->execute('CREATE INDEX s_sub_idx ON statements (subject)');
