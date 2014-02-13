@@ -231,18 +231,8 @@ class N3Parser extends Object {
  */
   function & generateModel($path,$dummy=false,$model=false) {
 
-    $handle = fopen($path,'r') or die("N3 Parser: Could not open File: '$path' - Stopped parsing.");
-	$done=false;
-	$input="";
-	while(!$done)
-	{
-	  $input .= fread( $handle, 512 );
-	  $done = feof($handle);
+    $input=file_get_contents($path) or die("N3 Parser: Could not open File: '$path' - Stopped parsing.");;
 
-	};
-
-
-    fclose($handle);
 
     $m = $this->parse2model($input,$model);
     return $m;
