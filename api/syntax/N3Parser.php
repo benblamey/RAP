@@ -196,7 +196,13 @@ class N3Parser extends Object {
    * @return object Model
    **/
 
-  function parse2model($s,$model = false) {
+  function parse2model(&$s,$model = false) {
+      
+      
+      echo "parse2model()\n";
+      
+
+      
 	if($model == false){
 	    $m=new MemModel();
 	}else{
@@ -204,6 +210,8 @@ class N3Parser extends Object {
 	}
     //   """Get a string, tokenize, create list, convert to Eep store."""
     $stat=$this->n3tolist($s);
+    unset($s);
+    
 
     foreach ( $stat as $t) {
       $s=$this->toRDFNode($t[0],$t);
@@ -273,7 +281,7 @@ class N3Parser extends Object {
    * @access private
    * @param array $list
    **/
-  function filterWs($list) {
+  function &filterWs($list) {
     //    var_dump($list);
     //  """Filter whitespace from a list."""
 
@@ -425,14 +433,14 @@ function str2unicode_nfc($str=""){
    * @returns array
    * @access private
    **/
-  function toke($s) {
+  function &toke(&$s) {
 
     //    print "$s\n";
     //   """Notation3 tokenizer. Takes in a string, returns a raw token list."""
     if (strlen($s) == 0) die('Document has no content!');
 
-    $s=str_replace("\r\n","\n",$s);
-    $s=str_replace("\r","\n",$s);
+    //$s=str_replace("\r\n","\n",$s);
+    //$s=str_replace("\r","\n",$s);
 
 
     //$lines=explode("\n",$s);
@@ -449,6 +457,8 @@ function str2unicode_nfc($str=""){
 
     $res=array();
     preg_match_all($this->Tokens, $s, $newres);
+    
+    
     $res=$this->array_concat($res, array_map('trim', $newres[0]));
 //var_dump($newres[0]);
     return $res;
@@ -989,7 +999,7 @@ function str2unicode_nfc($str=""){
    * @returns array
    * @access private
    **/
-  function n3tolist($s) {
+  function n3tolist(&$s) {
 
     //   """Convert an N3 string into a list of triples as strings."""
     $result = array();
@@ -1000,7 +1010,10 @@ function str2unicode_nfc($str=""){
       print "Filter WS:\n";
       var_dump($t);
     }
+    
+    echo "Executing getPrefixes()..\n";
     $r=$this->getPrefixes($t); # get the prefix directives, and add to a dict
+    unset($t);
     $prefixes=$r[0];
     $t=$r[1];
     if ($this->debug) {
